@@ -17,7 +17,7 @@ export default function DisplayLogo() {
       />
       <span className="flex flex-col text-[12px] md:text-[16px]">
         <p className="font-bold">Desa Bujak</p>
-        <p>Tatas Tuhu Trasna</p>
+        <p>Bujak Bijak Bajik</p>
       </span>
     </div>
   );

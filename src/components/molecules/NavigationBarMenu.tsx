@@ -72,8 +72,18 @@ export default function NavigationBarMenu() {
         </Link>
       </li>
       <li>
-        <DropdownInformation />
+        <Link href={"/tentang-desa"}>
+          <ButtonTetiary>Tentang Desa</ButtonTetiary>
+        </Link>
       </li>
+      <li>
+        <Link href={"/potensi-desa"}>
+          <ButtonTetiary>Potensi Desa</ButtonTetiary>
+        </Link>
+      </li>
+      {/* <li>
+        <DropdownInformation />
+      </li> */}
       <li>
         <ButtonTetiary>Galeri</ButtonTetiary>
       </li>
