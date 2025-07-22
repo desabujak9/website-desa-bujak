@@ -1,95 +1,124 @@
-import { useState, useRef, useEffect } from "react";
-import ButtonTetiary from "../atoms/ButtonTetiary";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-function DropdownInformation() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [alignRight, setAlignRight] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+const navLinks = [
+  { label: "Beranda", href: "/" },
+  { label: "Tentang Desa", href: "/tentang-desa" },
+  { label: "Potensi Desa", href: "/potensi-desa" },
+  { label: "Galeri", href: "/galeri" },
+  { label: "Artikel", href: "/artikel" },
+];
 
-  useEffect(() => {
-    if (isOpen && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const windowWidth = window.innerWidth;
-      const spaceRight = windowWidth - rect.left;
-
-      // Kalau jarak dari kiri ke kanan layar kurang dari 200px, geser ke kiri
-      setAlignRight(spaceRight < 200);
-    }
-  }, [isOpen]);
-
-  return (
-    <div
-      ref={containerRef}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-      className="relative inline-block text-[14px] md:text-[16px] cursor-pointer"
-    >
-      {/* Trigger */}
-      <div className="flex items-center gap-[6px]">
-        Informasi
-        <div
-          className={`transition-transform duration-300 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
-        >
-          ▼
-        </div>
-      </div>
-
-      {/* Underline */}
-      <div
-        className={`h-[1px] bg-black transition-all ${
-          isOpen ? "w-full" : "w-0"
-        }`}
-      />
-
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <ul
-          className={`absolute z-10 bg-white border rounded shadow text-sm w-40 
-          ${alignRight ? "right-0" : "left-0"}`}
-        >
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            Kependudukan
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            Sejarah
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Budaya</li>
-        </ul>
-      )}
-    </div>
-  );
-}
+const dropdownLinks = [
+  { label: "Sejarah", href: "/informasi/sejarah" },
+  { label: "Kependudukan", href: "/informasi/kependudukan" },
+  { label: "Budaya", href: "/informasi/budaya" },
+];
 
 export default function NavigationBarMenu() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   return (
-    <ul className="flex items-center gap-[12px] text-[12px] md:text-[16px]">
-      <li>
-        <Link href={"/"}>
-          <ButtonTetiary>Beranda</ButtonTetiary>
-        </Link>
-      </li>
-      <li>
-        <Link href={"/tentang-desa"}>
-          <ButtonTetiary>Tentang Desa</ButtonTetiary>
-        </Link>
-      </li>
-      <li>
-        <Link href={"/potensi-desa"}>
-          <ButtonTetiary>Potensi Desa</ButtonTetiary>
-        </Link>
-      </li>
-      {/* <li>
-        <DropdownInformation />
-      </li> */}
-      <li>
-        <ButtonTetiary>Galeri</ButtonTetiary>
-      </li>
-      <li>
-        <ButtonTetiary>Artikel</ButtonTetiary>
-      </li>
-    </ul>
+    <>
+      {/* Desktop */}
+      <ul className="hidden md:flex items-center gap-6 text-sm relative">
+        {navLinks.map((link) => (
+          <li key={link.label}>
+            <Link
+              href={link.href}
+              className="relative group hover:text-black transition"
+            >
+              {link.label}
+              <span className="block h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+            </Link>
+          </li>
+        ))}
+        <li className="relative">
+          <button
+            onClick={() => setDropdownOpen((prev) => !prev)}
+            className="flex items-center gap-1 hover:text-black transition"
+          >
+            Informasi
+            <ChevronDown
+              className={`transition-transform duration-300 ${
+                dropdownOpen ? "rotate-180" : "rotate-0"
+              }`}
+              size={16}
+            />
+            <span className="block h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+          </button>
+
+          <div
+            className={`absolute top-full mt-2 bg-white shadow-md border rounded z-50 overflow-hidden transition-all duration-300 origin-top
+    ${
+      dropdownOpen
+        ? "scale-100 opacity-100 pointer-events-auto"
+        : "scale-95 opacity-0 pointer-events-none"
+    }
+    right-0 w-48 max-w-[calc(100vw-2rem)]`}
+          >
+            <ul className="py-2">
+              {dropdownLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 transition"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+      {/* Mobile Menu Toggle */}
+      <div className="md:hidden">
+        <button onClick={() => setMobileOpen(!mobileOpen)}>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden fixed top-[64px] left-0 right-0 bg-white border-t shadow transition-all duration-300 z-40 ${
+          mobileOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        <div className="p-4 space-y-2 text-sm">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block px-2 py-2 hover:text-black"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div className="pt-2 border-t">
+            <p className="text-gray-600 font-semibold">Informasi</p>
+            {dropdownLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block px-2 py-1 hover:bg-gray-100 rounded"
+                onClick={() => setMobileOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
