@@ -13,9 +13,9 @@ const navLinks = [
 ];
 
 const dropdownLinks = [
-  { label: "Sejarah", href: "/informasi/sejarah" },
-  { label: "Kependudukan", href: "/informasi/kependudukan" },
-  { label: "Budaya", href: "/informasi/budaya" },
+  { label: "Sejarah", href: "/sejarah" },
+  { label: "Kependudukan", href: "/kependudukan" },
+  { label: "Budaya", href: "/budaya" },
 ];
 
 export default function NavigationBarMenu() {

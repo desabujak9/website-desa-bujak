@@ -35,7 +35,7 @@ export default function SectionDynamic({
         hasTopBorder ? "border-t border-gray-300" : ""
       }`}
     >
-      <div className="flex flex-col items-center gap-12 max-w-3xl mx-auto">
+      <div className="flex flex-col items-center gap-12 max-w-xl mx-auto">
         {/* Judul */}
         <H1 className="text-2xl md:text-3xl text-center">{content.title}</H1>
 

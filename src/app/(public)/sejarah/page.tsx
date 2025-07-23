@@ -29,23 +29,16 @@ export default function SejarahPage() {
         title: "Awal Mula Desa Bujak",
         image: "/images/sejarah-bujak.jpg", // ganti dengan path gambar relevan
         paragraphs: [
-          "Secara administratif, Desa Bujak pada awalnya merupakan bagian dari Desa Barabali. Namun, pada masa itu masyarakat masih mengalami keterbatasan akses informasi terkait pendidikan, ekonomi, sosial budaya, dan keagamaan.",
+          "Secara administratif, Desa Bujak pada awalnya merupakan bagian dari Desa Barabali. Namun demikian, pada saar itu tatanan kehidupan masyarakat masih jauh dari akses informasi yang berkaitan dengan aspek pendidikan, ekonomi, sosial budaya, dan keagamaan.",
           "Kondisi ini diperparah oleh minimnya infrastruktur jalan penghubung antar desa, yang menyebabkan keterjangkauan pelayanan pemerintahan menjadi terbatas.",
           "Melihat hal tersebut, sejumlah tokoh masyarakat terdahulu mulai bergerak dalam berbagai bidang, salah satunya pendidikan, yang ditandai dengan berdirinya sekolah dasar pertama di Desa Bujak, yaitu SDN Gunung Amuk.",
+          "Muncul perada yang mengijinkan Desa Barabali untuk dimekarkan dengan Bapak H. Ahmad Mas’udi atau yang biasa disebut sebagai Bapak Depan untuk menjadi kepala desa.",
+          "Ketika itu, Bapak Depan masih menjabat sebagai pegawai di Kabupaten Lombok Tengah, hingga akhirnya rela melepas jabatan tersebut untuk menjadi Kepala Desa Bujak.",
+          "Sikap Bapak Depan diikuti dengan pernyataan beliau berupa perumpamaan “Lebih Baik jadi Kepala Kambing daripada menjadi Ekor Macan”",
+          "Desa Bujak secara resmi ditetapkan sebagai desa baru hasil pemekaran Desa Barabali pada tanggal 29 Desember 1968",
         ],
       },
       hasTopBorder: false,
-    },
-    {
-      content: {
-        title: "Tokoh Perintis dan Pemekaran Desa",
-        paragraphs: [
-          "Pemekaran Desa Barabali menjadi Desa Bujak didorong oleh inisiatif tokoh masyarakat, terutama Bapak H. Ahmad Mas’udi atau yang dikenal sebagai 'Bapak Depan'. Beliau dengan rela mengundurkan diri dari jabatan di pemerintahan Kabupaten Lombok Tengah demi mengabdi sebagai Kepala Desa Bujak pertama.",
-          "Beliau dikenal dengan ungkapannya, 'Lebih baik jadi kepala kambing daripada menjadi ekor macan', yang mencerminkan semangat pengabdian terhadap masyarakat desa.",
-          "Desa Bujak secara resmi ditetapkan sebagai desa hasil pemekaran dari Desa Barabali pada tanggal 29 Desember 1968.",
-        ],
-      },
-      hasTopBorder: true,
     },
   ]);
 
