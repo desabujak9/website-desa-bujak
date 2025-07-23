@@ -60,32 +60,6 @@ export default function Home() {
       hasTopBorder: true,
     },
   ]);
-
-  const [images, setImages] = useState([
-    {
-      title: "Potensi Utama Desa",
-      items: [
-        {
-          src: "/sawah.jpeg",
-          alt: "Sawah",
-          title: "Pertanian",
-          desc: "Desa Bujak didominasi lahan sawah. Komoditas utama seperti padi dan cabai tumbuh subur karena kondisi tanah yang baik.",
-        },
-        {
-          src: "/peternakan.jpg",
-          alt: "Peternakan",
-          title: "Peternakan",
-          desc: "Peternakan berkembang lewat inovasi seperti pembuatan silase dan mineral blok untuk meningkatkan produktivitas ternak.",
-        },
-        {
-          src: "/beruga.webp",
-          alt: "Kerajinan Bambu",
-          title: "Kerajinan Bambu",
-          desc: "Pengrajin membuat berugak, piring cetak, dan furnitur bambu yang dikenal hingga luar Lombok.",
-        },
-      ],
-    },
-  ]);
   return (
     <main className="min-h-screen flex flex-col  items-center">
       <div className="relative flex min-h-screen md:min-h-0 md:h-[50vh] w-full items-center justify-center overflow-hidden">
