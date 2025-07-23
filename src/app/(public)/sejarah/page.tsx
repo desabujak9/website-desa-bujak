@@ -1,57 +1,72 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import H1 from "@/components/atoms/H1";
+import P from "@/components/atoms/P";
 import SectionDynamic from "@/components/organisms/SectionDynamic";
-import { useState } from "react";
 
-type ParagraphContent = {
+type ContentBlock = {
   title: string;
-  paragraphs: string[];
   image?: string;
+  paragraphs: string[];
 };
 
-type ImageItem = {
+type Item = {
   src: string;
   alt: string;
   title: string;
   desc: string;
 };
 
-type SectionDynamicProps = {
-  content: ParagraphContent;
-  items?: ImageItem[];
-  hasTopBorder?: boolean;
+type Section = {
+  content?: ContentBlock;
+  items?: Item[];
+  hasTopBorder: boolean;
 };
 
 export default function SejarahPage() {
-  const [content, setContent] = useState<SectionDynamicProps[]>([
-    {
-      content: {
-        title: "Awal Mula Desa Bujak",
-        image: "/images/sejarah-bujak.jpg", // ganti dengan path gambar relevan
-        paragraphs: [
-          "Secara administratif, Desa Bujak pada awalnya merupakan bagian dari Desa Barabali. Namun demikian, pada saar itu tatanan kehidupan masyarakat masih jauh dari akses informasi yang berkaitan dengan aspek pendidikan, ekonomi, sosial budaya, dan keagamaan.",
-          "Kondisi ini diperparah oleh minimnya infrastruktur jalan penghubung antar desa, yang menyebabkan keterjangkauan pelayanan pemerintahan menjadi terbatas.",
-          "Melihat hal tersebut, sejumlah tokoh masyarakat terdahulu mulai bergerak dalam berbagai bidang, salah satunya pendidikan, yang ditandai dengan berdirinya sekolah dasar pertama di Desa Bujak, yaitu SDN Gunung Amuk.",
-          "Muncul perada yang mengijinkan Desa Barabali untuk dimekarkan dengan Bapak H. Ahmad Mas’udi atau yang biasa disebut sebagai Bapak Depan untuk menjadi kepala desa.",
-          "Ketika itu, Bapak Depan masih menjabat sebagai pegawai di Kabupaten Lombok Tengah, hingga akhirnya rela melepas jabatan tersebut untuk menjadi Kepala Desa Bujak.",
-          "Sikap Bapak Depan diikuti dengan pernyataan beliau berupa perumpamaan “Lebih Baik jadi Kepala Kambing daripada menjadi Ekor Macan”",
-          "Desa Bujak secara resmi ditetapkan sebagai desa baru hasil pemekaran Desa Barabali pada tanggal 29 Desember 1968",
-        ],
-      },
-      hasTopBorder: false,
-    },
-  ]);
+  const [sections, setSections] = useState<Section[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/page-content?page=sejarah");
+        if (!res.ok) throw new Error("Gagal mengambil data dari server.");
+        const json = await res.json();
+        setSections(json.data || []);
+      } catch (err: any) {
+        console.error("Gagal mengambil data:", err);
+        setError("Gagal memuat konten. Silakan coba lagi nanti.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
-    <main className="min-h-screen flex flex-col">
-      {content.map((section, index) => (
-        <SectionDynamic
-          key={index}
-          content={section.content}
-          items={section.items}
-          hasTopBorder={section.hasTopBorder}
-        />
-      ))}
+    <main className="min-h-screen flex flex-col items-center">
+      {/* Section Content */}
+      {loading && <p className="py-10">Memuat konten...</p>}
+      {error && <p className="py-10 text-red-600">{error}</p>}
+      {!loading && !error && sections.length === 0 && (
+        <p className="py-10 text-gray-500">Belum ada konten tersedia.</p>
+      )}
+      {!loading &&
+        !error &&
+        sections.map((section, index) =>
+          section.content ? (
+            <SectionDynamic
+              key={index}
+              content={section.content}
+              items={section.items}
+              hasTopBorder={section.hasTopBorder}
+            />
+          ) : null
+        )}
     </main>
   );
 }
