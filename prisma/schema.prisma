@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model PageContent {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  page  String
+  data  Section[]
+}
+
+type Section {
+  content      ContentBlock?
+  items        Item[]        // bisa kosong jika tidak digunakan
+  hasTopBorder Boolean
+}
+
+type ContentBlock {
+  title      String
+  image      String?
+  paragraphs String[]
+}
+
+type Item {
+  src   String
+  alt   String
+  title String
+  desc  String
+}
