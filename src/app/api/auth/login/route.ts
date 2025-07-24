@@ -16,8 +16,8 @@ export async function POST(req: Request) {
     );
   }
 
-  // Simpan user id di cookie sebagai token sederhana
-  cookies().set("token", user.id, {
+  const cookieStore = await cookies(); // FIX: use directly
+  cookieStore.set("token", user.id, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     path: "/",

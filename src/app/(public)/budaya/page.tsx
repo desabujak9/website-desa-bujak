@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import H1 from "@/components/atoms/H1";
-import P from "@/components/atoms/P";
 import SectionDynamic from "@/components/organisms/SectionDynamic";
 
 type ContentBlock = {
