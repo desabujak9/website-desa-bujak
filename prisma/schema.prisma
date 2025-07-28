@@ -39,3 +39,10 @@ model User {
   name     String
   createdAt DateTime @default(now())
 }
+
+model Galeri {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  src    String
+  alt    String
+  createdAt DateTime @default(now())
+}
