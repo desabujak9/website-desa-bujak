@@ -46,3 +46,18 @@ model Galeri {
   alt    String
   createdAt DateTime @default(now())
 }
+
+model ArtikelContent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  slug      String   @unique
+  content   ParagraphBlock[]
+  thumbnail String   // URL ke Cloudinary
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+type ParagraphBlock {
+  image      String?   // URL ke Cloudinary (opsional)
+  paragraphs String[]  // paragraf isi
+}

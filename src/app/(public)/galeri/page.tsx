@@ -20,25 +20,10 @@ export default function GaleriPage() {
   useEffect(() => {
     async function fetchImages() {
       try {
-        const mockImages: GalleryItem[] = [
-          {
-            id: "1",
-            src: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-            alt: "Pemandangan 1",
-          },
-          {
-            id: "2",
-            src: "https://res.cloudinary.com/demo/image/upload/non_existent.jpg",
-            alt: "Pemandangan 2",
-          },
-          {
-            id: "3",
-            src: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-            alt: "Pemandangan 3",
-          },
-        ];
-
-        setImages(mockImages);
+        const res = await fetch("/api/galeri");
+        if (!res.ok) throw new Error("Gagal mengambil data galeri");
+        const data: GalleryItem[] = await res.json();
+        setImages(data);
       } catch (error) {
         console.error("Gagal memuat gambar:", error);
       } finally {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import imageCompression from "browser-image-compression";
+import Image from "next/image";
 
 type ContentBlock = {
   title: string;
@@ -174,7 +175,7 @@ export default function HomeEditorAdminPage() {
                 }}
               />
               {section.content.image && (
-                <img
+                <Image
                   src={section.content.image}
                   alt="preview"
                   className="w-full max-w-md rounded aspect-[4/3] object-cover"
