@@ -1,103 +1,114 @@
+// src/app/(public)/artikel/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import H1 from "@/components/atoms/H1";
-import P from "@/components/atoms/P";
-
-type ParagraphBlock = {
-  image?: string;
-  paragraphs: string[];
-};
 
 type Artikel = {
   id: string;
   title: string;
-  createdAt: string;
   thumbnail: string;
-  content: ParagraphBlock[];
+  createdAt: string;
+  content: { paragraphs: string[] }[];
 };
 
-export default function ArtikelKontenPage() {
-  const params = useSearchParams();
-  const id = params.get("id");
-
-  const [artikel, setArtikel] = useState<Artikel | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+function ArtikelPageClient() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [data, setData] = useState<Artikel[] | Artikel | null>(null);
+  const [mode, setMode] = useState<"list" | "single" | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    const fetchData = async () => {
+      const res = await fetch(`/api/artikel${id ? `?id=${id}` : ""}`);
+      const json = await res.json();
+      setMode(json.mode);
+      setData(json.data);
+    };
 
-    async function fetchArtikel() {
-      try {
-        const res = await fetch(`/api/artikel/konten?id=${id}`);
-        if (!res.ok) throw new Error("Gagal memuat artikel");
-        const data = await res.json();
-        setArtikel(data);
-      } catch (e) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchArtikel();
+    fetchData();
   }, [id]);
 
-  if (!id) return <p className="py-10 text-center">ID tidak ditemukan.</p>;
-  if (loading) return <p className="py-10 text-center">Memuat artikel...</p>;
-  if (error || !artikel)
+  if (!data || !mode) {
+    return <p className="p-4 text-gray-600">Memuat...</p>;
+  }
+
+  if (mode === "single" && !Array.isArray(data)) {
     return (
-      <p className="py-10 text-center text-red-500">Gagal memuat artikel.</p>
-    );
-
-  return (
-    <main className="max-w-3xl mx-auto px-4 py-10">
-      <H1 className="mb-4">{artikel.title}</H1>
-      <P className="text-gray-500 mb-6">
-        {new Date(artikel.createdAt).toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      </P>
-
-      {artikel.thumbnail && (
-        <div className="relative w-full aspect-[16/9] mb-6">
+      <main className="max-w-3xl mx-auto p-6 space-y-4">
+        <h1 className="text-3xl font-bold">{data.title}</h1>
+        <p className="text-gray-500">
+          {new Date(data.createdAt).toLocaleString("id-ID", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+        <div className="relative w-full aspect-[3/2] rounded overflow-hidden mb-4">
           <Image
-            src={artikel.thumbnail}
-            alt={artikel.title}
+            src={data.thumbnail}
+            alt={data.title}
             fill
-            className="object-cover rounded-xl"
-            sizes="(max-width: 768px) 100vw, 720px"
+            className="object-cover"
           />
         </div>
-      )}
+        {data.content[0]?.paragraphs.map((para, i) => (
+          <p key={i} className="text-gray-800 leading-relaxed">
+            {para}
+          </p>
+        ))}
+      </main>
+    );
+  }
 
-      <div className="flex flex-col gap-8">
-        {artikel.content.map((block, i) => (
-          <div key={i} className="flex flex-col gap-4">
-            {block.image && (
-              <div className="relative w-full aspect-[3/2] rounded-xl overflow-hidden shadow">
+  if (mode === "list" && Array.isArray(data)) {
+    return (
+      <main className="max-w-5xl mx-auto p-6">
+        <h1 className="text-3xl font-bold mb-4">Daftar Artikel</h1>
+        <div className="grid gap-6 md:grid-cols-2">
+          {data.map((artikel) => (
+            <Link
+              href={`/artikel?id=${artikel.id}`}
+              key={artikel.id}
+              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+            >
+              <div className="relative w-full h-48">
                 <Image
-                  src={block.image}
-                  alt={`Gambar paragraf ${i + 1}`}
+                  src={artikel.thumbnail}
+                  alt={artikel.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 720px"
                 />
               </div>
-            )}
-            {block.paragraphs.map((p, j) => (
-              <P key={j} className="text-justify leading-relaxed">
-                {p}
-              </P>
-            ))}
-          </div>
-        ))}
-      </div>
-    </main>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold">{artikel.title}</h2>
+                <p className="text-sm text-gray-500">
+                  {new Date(artikel.createdAt).toLocaleDateString("id-ID", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </main>
+    );
+  }
+
+  return <p className="p-4 text-red-500">Terjadi kesalahan format data.</p>;
+}
+
+export default function ArtikelPage() {
+  return (
+    <Suspense fallback={<p className="p-4 text-gray-600">Memuat konten...</p>}>
+      <ArtikelPageClient />
+    </Suspense>
   );
 }

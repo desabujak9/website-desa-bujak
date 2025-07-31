@@ -210,22 +210,6 @@ export default function AdminArtikelPage() {
           </div>
         </div>
       )}
-
-      {showDelete && selected && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded max-w-sm w-full">
-            <P className="mb-4">
-              Yakin ingin menghapus artikel <strong>"{selected.title}"</strong>?
-            </P>
-            <div className="flex justify-end gap-2">
-              <ButtonTetiary>
-                <span onClick={() => setShowDelete(false)}>Batal</span>
-              </ButtonTetiary>
-              <ButtonPrimary onClick={handleDelete}>Hapus</ButtonPrimary>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
