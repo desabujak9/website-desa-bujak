@@ -8,6 +8,13 @@ export async function GET() {
   try {
     const articles = await prisma.artikelContent.findMany({
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        thumbnail: true,
+        createdAt: true,
+      },
     });
     return NextResponse.json(articles);
   } catch (err) {

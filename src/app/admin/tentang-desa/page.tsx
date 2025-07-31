@@ -16,13 +16,13 @@ type Section = {
   hasTopBorder: boolean;
 };
 
-export default function HomeEditorAdminPage() {
+export default function TentangDesaEditorAdminPage() {
   const [sections, setSections] = useState<Section[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/page-content?page=beranda")
+    fetch("/api/page-content?page=tentang-desa")
       .then((res) => res.json())
       .then((data) => {
         setSections(data.data || []);
@@ -37,7 +37,7 @@ export default function HomeEditorAdminPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch("/api/page-content?page=beranda", {
+      const res = await fetch("/api/page-content?page=tentang-desa", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: sections }),
