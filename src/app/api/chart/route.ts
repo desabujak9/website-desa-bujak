@@ -4,8 +4,7 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const charts = await prisma.
-    \.findMany({
+    const charts = await prisma.chart.findMany({
       orderBy: { createdAt: "asc" },
     });
 
