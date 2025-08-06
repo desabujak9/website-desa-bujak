@@ -8,6 +8,16 @@ const navItems = [
     href: "/admin/beranda",
   },
   {
+    title: "Tentang Desa",
+    description: "Edit konten halaman tentang desa",
+    href: "/admin/tentang-desa",
+  },
+  {
+    title: "Sejarah",
+    description: "Edit konten halaman sejarah",
+    href: "/admin/sejarah",
+  },
+  {
     title: "Kependudukan",
     description: "Edit data dan infografis kependudukan",
     href: "/admin/kependudukan",
@@ -15,17 +25,17 @@ const navItems = [
   {
     title: "Kebudayaan",
     description: "Kelola informasi kebudayaan desa",
-    href: "/admin/kebudayaan",
-  },
-  {
-    title: "Peta Interaktif",
-    description: "Hubungkan data dengan tampilan peta",
-    href: "/admin/peta",
+    href: "/admin/budaya",
   },
   {
     title: "Galeri",
     description: "Hubungkan data dengan tampilan peta",
     href: "/admin/galeri",
+  },
+  {
+    title: "Artikel",
+    description: "Edit konten halaman artikel",
+    href: "/admin/artikel",
   },
 ];
 
