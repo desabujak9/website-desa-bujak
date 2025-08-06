@@ -16,85 +16,50 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const COLORS = ["#2B6CB0", "#48BB78", "#CBD5E0"];
 
 type ChartType = "pie" | "bar" | "line" | "area";
 
 type ChartData = {
+  id: string;
   type: ChartType;
   title: string;
   data: { name: string; value: number }[];
 };
 
 export default function KependudukanPage() {
-  const [charts] = useState<ChartData[]>([
-    {
-      type: "pie",
-      title: "Komposisi Berdasarkan Jenis Kelamin",
-      data: [
-        { name: "Laki-laki", value: 5530 },
-        { name: "Perempuan", value: 5349 },
-      ],
-    },
-    {
-      type: "pie",
-      title: "Struktur Usia Penduduk",
-      data: [
-        { name: "Usia Produktif (15–64 tahun)", value: 7191 },
-        { name: "Usia Muda (0–14 tahun)", value: 3142 },
-        { name: "Lansia (65+)", value: 547 },
-      ],
-    },
-    {
-      type: "bar",
-      title: "Jumlah Penduduk per Dusun (2024)",
-      data: [
-        { name: "Montong Belok", value: 974 },
-        { name: "Lekong Madi", value: 490 },
-        { name: "Tenteh Lauk", value: 397 },
-        { name: "Baren Untung", value: 578 },
-        { name: "Batu Lumbuk", value: 835 },
-        { name: "Bujak", value: 724 },
-        { name: "Kebun Belek", value: 607 },
-        { name: "Racem", value: 664 },
-        { name: "Gunung Amuk", value: 932 },
-        { name: "Gunung Mujur", value: 448 },
-        { name: "Bajur", value: 602 },
-        { name: "Montong Paok", value: 397 },
-        { name: "Montong Geri", value: 358 },
-        { name: "Ting Petuk", value: 509 },
-        { name: "Gunung Petuk", value: 634 },
-        { name: "Sape", value: 290 },
-        { name: "Colok", value: 648 },
-        { name: "Dasan Lekong", value: 512 },
-        { name: "Bantun", value: 280 },
-      ],
-    },
-    {
-      type: "line",
-      title: "Tren Migrasi Tahunan (Contoh Data)",
-      data: [
-        { name: "2019", value: 120 },
-        { name: "2020", value: 180 },
-        { name: "2021", value: 200 },
-        { name: "2022", value: 240 },
-        { name: "2023", value: 210 },
-      ],
-    },
-    {
-      type: "area",
-      title: "Pertumbuhan Penduduk (Contoh Data)",
-      data: [
-        { name: "2019", value: 9800 },
-        { name: "2020", value: 10200 },
-        { name: "2021", value: 10600 },
-        { name: "2022", value: 10950 },
-        { name: "2023", value: 10879 },
-      ],
-    },
-  ]);
+  const [charts, setCharts] = useState<ChartData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCharts = async () => {
+      try {
+        const res = await fetch("/api/chart");
+        const json = await res.json();
+
+        // Konversi 'data' dari JSON string ke object jika perlu
+        const parsed = json.map((chart: any) => ({
+          id: chart.id,
+          type: chart.type,
+          title: chart.title,
+          data:
+            typeof chart.data === "string"
+              ? JSON.parse(chart.data)
+              : chart.data,
+        }));
+
+        setCharts(parsed);
+      } catch (err) {
+        console.error("Failed to load charts", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCharts();
+  }, []);
 
   const renderChart = (chart: ChartData) => {
     switch (chart.type) {
@@ -128,7 +93,7 @@ export default function KependudukanPage() {
             margin={{ top: 20, right: 30, left: 20, bottom: 100 }}
           >
             <Tooltip />
-            <Legend />
+            {/* <Legend /> */}
             <Bar dataKey="value" fill="#2B6CB0" />
             <XAxis
               dataKey="name"
@@ -192,22 +157,28 @@ export default function KependudukanPage() {
           Data Kependudukan Desa Bujak
         </h1>
 
-        {charts.map((chart, index) => (
-          <div
-            key={index}
-            className="bg-gray-50 rounded-xl shadow p-6 w-full mt-10"
-          >
-            <h2 className="text-lg font-semibold mb-4 text-center">
-              {chart.title}
-            </h2>
-            <ResponsiveContainer
-              width="100%"
-              height={chart.type === "bar" ? 400 : 250}
+        {loading ? (
+          <p className="text-center">Memuat data...</p>
+        ) : charts.length === 0 ? (
+          <p className="text-center text-red-500">Tidak ada data grafik</p>
+        ) : (
+          charts.map((chart, index) => (
+            <div
+              key={chart.id}
+              className="bg-gray-50 rounded-xl shadow p-6 w-full mt-10"
             >
-              {renderChart(chart)}
-            </ResponsiveContainer>
-          </div>
-        ))}
+              <h2 className="text-lg font-semibold mb-4 text-center">
+                {chart.title}
+              </h2>
+              <ResponsiveContainer
+                width="100%"
+                height={chart.type === "bar" ? 400 : 250}
+              >
+                {renderChart(chart)}
+              </ResponsiveContainer>
+            </div>
+          ))
+        )}
       </div>
     </main>
   );

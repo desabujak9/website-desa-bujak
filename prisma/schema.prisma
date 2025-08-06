@@ -61,3 +61,12 @@ type ParagraphBlock {
   image      String?   // URL ke Cloudinary (opsional)
   paragraphs String[]  // paragraf isi
 }
+
+model Chart {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String   // 'pie' | 'bar' | 'line' | 'area'
+  title     String
+  data      Json     // [{ name: string, value: number }]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

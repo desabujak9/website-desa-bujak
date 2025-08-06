@@ -2,13 +2,13 @@ import Image from "next/image";
 
 export default function DisplayLogo() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 ">
       <Image
-        src="/DESA BAHA.jpeg"
+        src="/logo_desa.jpeg"
         alt="Logo Desa"
-        width={40}
-        height={40}
-        className="rounded-full object-cover"
+        width={100}
+        height={100}
+        className="rounded-full w-fit h-[32px]"
       />
       <div className="leading-tight text-sm md:text-base">
         <p className="font-bold">Desa Bujak</p>
